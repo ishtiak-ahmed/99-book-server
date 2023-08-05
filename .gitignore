@@ -1,0 +1,8 @@
+node_modules
+.env
+src/config/env.var.ts
+note.md
+logs/*
+.vercel
+logs
+dist/config/env.var.js
