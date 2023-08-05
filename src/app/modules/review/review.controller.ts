@@ -7,7 +7,13 @@ import ApiError from '../../../errors/ApiError';
 import { ReviewService } from './review.service';
 import { IReview } from './review.interface';
 
-const addReview = catchAsync(async (req: Request, res: Response) => {
+
+export type AuthenticatedRequest = {
+  user?: TokenUser;
+} & Request
+
+
+const addReview = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const { ...reviewData } = req.body;
   const user = "user" in req ? (req.user as TokenUser).userId : "";
   const result = await ReviewService.addReview({...reviewData, user});
@@ -34,7 +40,7 @@ const getAllReview = catchAsync(async (req: Request, res: Response) => {
   }
 );
 
-const updateReview = catchAsync(async (req: Request, res: Response) => {
+const updateReview = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const id = req.params.id;
   const updatedData = req.body;
   const user = "user" in req ? (req.user as TokenUser).userId : "";
@@ -52,7 +58,7 @@ const updateReview = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const deleteReview = catchAsync(async (req: Request, res: Response) => {
+const deleteReview = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const id = req.params.id;
   const user = "user" in req ? (req.user as TokenUser).userId : "";
   const review = await ReviewService.getSingleReview(id)

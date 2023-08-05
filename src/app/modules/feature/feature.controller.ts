@@ -10,9 +10,10 @@ import ApiError from '../../../errors/ApiError';
 import { paginationFields } from '../../../constants/pagination';
 import pick from '../../../shared/pick';
 import { Status } from './feature.constant';
+import { AuthenticatedRequest } from '../review/review.controller';
 
 const addFeatureItem: RequestHandler = catchAsync(
-  async (req: Request, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const user = 'user' in req ? (req.user as TokenUser).userId : '';
     const result = await FeatureService.addToFeatureList({ ...req.body, user });
 
@@ -26,7 +27,7 @@ const addFeatureItem: RequestHandler = catchAsync(
 );
 
 const getAllFeatureItem: RequestHandler = catchAsync(
-  async (req: Request, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const user = 'user' in req ? (req.user as TokenUser).userId : '';
     const status = req.query.status as Status;
     const paginationOptions = pick(req.query, paginationFields);
@@ -46,7 +47,7 @@ const getAllFeatureItem: RequestHandler = catchAsync(
 );
 
 const updateFeatureItem: RequestHandler = catchAsync(
-  async (req: Request, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const user = 'user' in req ? (req.user as TokenUser).userId : '';
     const feature = await FeatureService.getSingleItem(req.params.id);
     if (feature?.user?.toString() !== user) {
@@ -67,7 +68,7 @@ const updateFeatureItem: RequestHandler = catchAsync(
 );
 
 const deleteFeatureItem: RequestHandler = catchAsync(
-  async (req: Request, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
     const user = 'user' in req ? (req.user as TokenUser).userId : '';
     const feature = await FeatureService.getSingleItem(req.params.id);
     if (feature?.user?.toString() !== user) {

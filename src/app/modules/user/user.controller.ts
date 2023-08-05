@@ -6,6 +6,7 @@ import sendResponse from '../../../shared/sendResponse';
 import { IUser } from './user.interface';
 import { UserService } from './user.service';
 import { TokenUser } from '../../../enums/user';
+import { AuthenticatedRequest } from '../review/review.controller';
 
 const createUser: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
@@ -34,7 +35,7 @@ const getSingleUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getProfile = catchAsync(async (req: Request, res: Response) => {
+const getProfile = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const id = "user" in req ? (req.user as TokenUser).userId : "";
   const result = await UserService.getSingleUser(id);
   sendResponse<IUser>(res, {
@@ -45,7 +46,7 @@ const getProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateProfile = catchAsync(async (req: Request, res: Response) => {
+const updateProfile = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const id = "user" in req ? (req.user as TokenUser).userId : "";
   const updatedData = req.body;
   const result = await UserService.updateUser(id, updatedData);
@@ -58,7 +59,7 @@ const updateProfile = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const deleteUser = catchAsync(async (req: Request, res: Response) => {
+const deleteUser = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const id = "user" in req ? (req.user as TokenUser).userId : "";
   const result = await UserService.deleteUser(id);
 

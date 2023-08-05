@@ -5,4 +5,4 @@ note.md
 logs/*
 .vercel
 logs
-dist/config/env.var.js
+dist

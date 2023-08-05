@@ -9,8 +9,9 @@ import { IBook } from './book.interface';
 import { bookFilterableFields } from './book.constant';
 import { TokenUser } from '../../../enums/user';
 import ApiError from '../../../errors/ApiError';
+import { AuthenticatedRequest } from '../review/review.controller';
 
-const createBook = catchAsync(async (req: Request, res: Response) => {
+const createBook = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const { ...bookData } = req.body;
   const creator = "user" in req ? (req.user as TokenUser).userId : "";
   const result = await BookService.createBook({...bookData, creator});
@@ -50,7 +51,7 @@ const getSingleBook = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateBook = catchAsync(async (req: Request, res: Response) => {
+const updateBook = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const id = req.params.id;
   const updatedData = req.body;
   const creator = "user" in req ? (req.user as TokenUser).userId : "";
@@ -68,7 +69,7 @@ const updateBook = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const deleteBook = catchAsync(async (req: Request, res: Response) => {
+const deleteBook = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const id = req.params.id;
   const creator = "user" in req ? (req.user as TokenUser).userId : "";
   const book = await BookService.getSingleBook(id)
